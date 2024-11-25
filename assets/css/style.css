@@ -15,3 +15,7 @@ header {
     background-color: #ff8400;
     color: white;
 }
+
+#instructionsBtn {
+    border: #ff8400;
+}
