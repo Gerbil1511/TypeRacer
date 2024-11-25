@@ -26,4 +26,23 @@ header {
     border-radius: 0;
 }
 
+.btn-lg {
+    border: 2px solid #ff8400;
+    transition: color 0.3s ease-in-out, background-color 0.1s ease-in-out;
+    margin: 5px;
+}
 
+.btn-lg:hover {
+    background-color: #ff8400;
+    color: #fff;
+}
+
+#resultsArea {
+    box-shadow: 0 0 10px #ff8400;
+    padding: 20px;
+}
+
+#resultsArea p {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
