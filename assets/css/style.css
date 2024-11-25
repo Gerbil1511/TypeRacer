@@ -16,6 +16,14 @@ header {
     color: white;
 }
 
-#instructionsBtn {
-    border: #ff8400;
+#instructionsButton {
+    border-radius: 0;
 }
+
+.input-group-text,
+.form-select,
+#typingArea {
+    border-radius: 0;
+}
+
+

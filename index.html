@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="col text-center col-md-12 my-3">
                     <h1 class="header-title">TypeRacer</h1>
-                    <button class="btn btn-light my-2" id="instructionsBtn">
+                    <button class="btn btn-light my-2" id="instructionsButton">
                         <i class="fas fa-info-circle mx-2" id="infoIcon"></i>Instructions</button>
                 </div>
             </div>
@@ -29,17 +29,33 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="inputGroupSelect01">Choose Difficulty</label>
-                        <select class="form-select" id="inputGroupSelect01">
+                        <label class="input-group-text" for="chooseDifficulty">Choose Difficulty</label>
+                        <select class="form-select" id="chooseDifficulty">
                             <option selected value="1">Easy</option>
                             <option value="2">Medium</option>
                             <option value="3">Hard</option>
                         </select>
                     </div>
+                    <div class="test-area">
+                        <p>Test your typing speed by typing the text shown below:</p>
+                        <div class="mb-3 border p-3" id="sample-text">
+                            The quick brown fox jumps over the lazy dog.
+                        </div>
+                    </div>
+                    <div class="mb-3 typing-area"></div>
+                        <label for="typingArea" class="form-label">Please type here:</label>
+                        <textarea class="form-control" id="typingArea" rows="5" placeholder="Please click the start button to begin the test"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <div class="container"></div>
+        <div class="row">
+            <div class="col text-center mx-2">
+                <!-- <p>Test your typing speed by typing the text shown below:</p> -->
+            </div>
+        </div>
 
     </main>
 
