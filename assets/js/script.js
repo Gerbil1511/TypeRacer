@@ -48,6 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedDifficulty = chooseDifficulty.value;
         const randomText = getRandomText(selectedDifficulty);
         sampleText.textContent = randomText;
+
+        // Clear the textInput area and resultsArea
+    textInput.value = '';
+    timeDisplay.textContent = '';
+    wpmDisplay.textContent = '';
+    difficultyDisplay.textContent = '';
     }
 
     // Function to start the typing test
@@ -55,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startTime = new Date(); // Record the start time
         startBtn.disabled = true; // Disable the start button
         stopBtn.disabled = false; // Enable the stop button
+        textInput.disabled = false; // Enable the text input field
         textInput.value = ''; // Clear the text input field
         textInput.focus(); // Set focus on the text input field
     }
@@ -90,15 +97,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
         startBtn.disabled = false; // Enable the start button
         stopBtn.disabled = true; // Disable the stop button
+        textInput.disabled = true; // Disable the text input field
+    }
+
+    // Function to provide real-time feedback on typing accuracy
+    function provideRealTimeFeedback() {
+        const sampleWords = sampleText.textContent.split(' ');
+        const inputWords = textInput.value.split(' ');
+
+        let highlightedText = '';
+
+        for (let i = 0; i < sampleWords.length; i++) {
+            if (inputWords[i] === undefined) {
+                highlightedText += `<span>${sampleWords[i]}</span> `;
+            } else if (inputWords[i] === sampleWords[i]) {
+                highlightedText += `<span style="color: blue;">${sampleWords[i]}</span> `;
+            } else {
+                highlightedText += `<span style="color: red;">${sampleWords[i]}</span> `;
+            }
+        }
+
+        sampleText.innerHTML = highlightedText.trim();
     }
 
     // Add event listeners
     chooseDifficulty.addEventListener('change', updateSampleText); // Update sample text when difficulty changes
     startBtn.addEventListener('click', startTest); // Start the test when start button is clicked
     stopBtn.addEventListener('click', stopTest); // Stop the test when stop button is clicked
+    textInput.addEventListener('input', provideRealTimeFeedback); // Provide real-time feedback as the user types
 
     // Initialize with the default difficulty level
     const initialDifficulty = chooseDifficulty.value;
     sampleText.textContent = getRandomText(initialDifficulty); // Set initial sample text
-    stopBtn.disabled = true; // Disable the stop button initially
+    textInput.disabled = true; // Disable the text input field initially
 });
