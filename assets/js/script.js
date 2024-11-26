@@ -30,6 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
     const timeDisplay = document.getElementById('time');
+    const wpmDisplay = document.getElementById('wpm');
+    const difficultyDisplay = document.getElementById('difficulty');
+    const textInput = document.getElementById('textInput');
 
     let startTime, endTime;
 
@@ -52,14 +55,39 @@ document.addEventListener('DOMContentLoaded', () => {
         startTime = new Date(); // Record the start time
         startBtn.disabled = true; // Disable the start button
         stopBtn.disabled = false; // Enable the stop button
-        document.getElementById('textInput').value = ''; // Clear the text input field
+        textInput.value = ''; // Clear the text input field
+        textInput.focus(); // Set focus on the text input field
+    }
+
+    // Function to count the number of correctly typed words
+    function countCorrectWords(sample, input) {
+        const sampleWords = sample.split(' ');
+        const inputWords = input.split(' ');
+        let correctWords = 0;
+
+        for (let i = 0; i < inputWords.length; i++) {
+            if (inputWords[i] === sampleWords[i]) {
+                correctWords++;
+            }
+        }
+
+        return correctWords;
     }
 
     // Function to stop the typing test
     function stopTest() {
         endTime = new Date(); // Record the end time
         const timeTaken = (endTime - startTime) / 1000; // Calculate the time taken in seconds
-        timeDisplay.textContent = timeTaken.toFixed(2); // Display the time taken
+        timeDisplay.textContent = `${timeTaken.toFixed(2)} seconds`; // Display the time taken
+
+        const sample = sampleText.textContent;
+        const input = textInput.value;
+        const correctWords = countCorrectWords(sample, input);
+        const wpm = Math.round((correctWords / timeTaken) * 60); // Calculate WPM
+
+        wpmDisplay.textContent = `${wpm}`; // Display the WPM
+        difficultyDisplay.textContent = `${chooseDifficulty.value.toUpperCase()}`; // Display the difficulty level
+
         startBtn.disabled = false; // Enable the start button
         stopBtn.disabled = true; // Disable the stop button
     }
