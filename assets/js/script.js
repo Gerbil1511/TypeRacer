@@ -27,6 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get references to the DOM elements
     const chooseDifficulty = document.getElementById('chooseDifficulty');
     const sampleText = document.getElementById('sampleText');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const timeDisplay = document.getElementById('time');
+
+    let startTime, endTime;
 
     // Function to get a random text based on the selected difficulty
     function getRandomText(difficulty) {
@@ -42,9 +47,30 @@ document.addEventListener('DOMContentLoaded', () => {
         sampleText.textContent = randomText;
     }
 
-    chooseDifficulty.addEventListener('change', updateSampleText);
+    // Function to start the typing test
+    function startTest() {
+        startTime = new Date(); // Record the start time
+        startBtn.disabled = true; // Disable the start button
+        stopBtn.disabled = false; // Enable the stop button
+        document.getElementById('textInput').value = ''; // Clear the text input field
+    }
+
+    // Function to stop the typing test
+    function stopTest() {
+        endTime = new Date(); // Record the end time
+        const timeTaken = (endTime - startTime) / 1000; // Calculate the time taken in seconds
+        timeDisplay.textContent = timeTaken.toFixed(2); // Display the time taken
+        startBtn.disabled = false; // Enable the start button
+        stopBtn.disabled = true; // Disable the stop button
+    }
+
+    // Add event listeners
+    chooseDifficulty.addEventListener('change', updateSampleText); // Update sample text when difficulty changes
+    startBtn.addEventListener('click', startTest); // Start the test when start button is clicked
+    stopBtn.addEventListener('click', stopTest); // Stop the test when stop button is clicked
 
     // Initialize with the default difficulty level
     const initialDifficulty = chooseDifficulty.value;
-    sampleText.textContent = getRandomText(initialDifficulty);
+    sampleText.textContent = getRandomText(initialDifficulty); // Set initial sample text
+    stopBtn.disabled = true; // Disable the stop button initially
 });
