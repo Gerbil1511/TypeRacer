@@ -29,18 +29,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const sampleText = document.getElementById('sampleText');
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
+    const retryBtn = document.getElementById('retryBtn');
     const timeDisplay = document.getElementById('time');
     const wpmDisplay = document.getElementById('wpm');
     const difficultyDisplay = document.getElementById('difficulty');
     const textInput = document.getElementById('textInput');
 
+    let timerInterval;
     let startTime, endTime;
+    let timerStarted = false;
 
     // Function to get a random text based on the selected difficulty
     function getRandomText(difficulty) {
-        const options = textsDifficulty[difficulty];
-        const randomIndex = Math.floor(Math.random() * options.length);
-        return options[randomIndex];
+        const texts = textsDifficulty[difficulty];
+        return texts[Math.floor(Math.random() * texts.length)];
     }
 
     // Event listener for when the difficulty selection changes
@@ -50,20 +52,28 @@ document.addEventListener('DOMContentLoaded', () => {
         sampleText.textContent = randomText;
 
         // Clear the textInput area and resultsArea
-    textInput.value = '';
-    timeDisplay.textContent = '';
-    wpmDisplay.textContent = '';
-    difficultyDisplay.textContent = '';
+        textInput.value = '';
+        timeDisplay.textContent = '';
+        wpmDisplay.textContent = '';
+        difficultyDisplay.textContent = '';
+    }
+
+    // Function to update the time display
+    function updateTimeDisplay() {
+        const currentTime = new Date();
+        const timeTaken = (currentTime - startTime) / 1000; // Calculate the time taken in seconds
+        timeDisplay.textContent = `${timeTaken.toFixed(2)} seconds`; // Display the time taken
     }
 
     // Function to start the typing test
     function startTest() {
-        startTime = new Date(); // Record the start time
         startBtn.disabled = true; // Disable the start button
-        stopBtn.disabled = false; // Enable the stop button
+        stopBtn.disabled = true; // Disable the stop button initially
+        retryBtn.disabled = true; // Disable the retry button
         textInput.disabled = false; // Enable the text input field
         textInput.value = ''; // Clear the text input field
         textInput.focus(); // Set focus on the text input field
+        timerStarted = false; // Reset the timer started flag
     }
 
     // Function to count the number of correctly typed words
@@ -83,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to stop the typing test
     function stopTest() {
+        clearInterval(timerInterval); // Clear the timer interval
         endTime = new Date(); // Record the end time
         const timeTaken = (endTime - startTime) / 1000; // Calculate the time taken in seconds
         timeDisplay.textContent = `${timeTaken.toFixed(2)} seconds`; // Display the time taken
@@ -98,36 +109,76 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.disabled = false; // Enable the start button
         stopBtn.disabled = true; // Disable the stop button
         textInput.disabled = true; // Disable the text input field
+        retryBtn.disabled = false; // Enable the retry button
+    }
+
+    // Function to reset the typing test
+    function resetTest() {
+        const difficulty = chooseDifficulty.value;
+        sampleText.textContent = getRandomText(difficulty); // Load a new sample text
+        textInput.value = ''; // Clear the text input field
+        textInput.disabled = false; // Enable the text input field
+        textInput.focus(); // Set focus on the text input field
+        timeDisplay.textContent = ''; // Reset the time display
+        wpmDisplay.textContent = ''; // Reset the WPM display
+        difficultyDisplay.textContent = ''; // Reset the difficulty display
+        startBtn.disabled = false; // Enable the start button
+        stopBtn.disabled = true; // Disable the stop button
+        retryBtn.disabled = true; // Disable the retry button
+        timerStarted = false; // Reset the timer started flag
+        clearInterval(timerInterval); // Clear any existing timer interval
     }
 
     // Function to provide real-time feedback on typing accuracy
     function provideRealTimeFeedback() {
+        if (!timerStarted) {
+            startTime = new Date(); // Record the start time
+            timerInterval = setInterval(updateTimeDisplay, 100); // Start the timer interval to update the time display every 100 milliseconds
+            timerStarted = true; // Set the timer started flag
+        }
+
         const sampleWords = sampleText.textContent.split(' ');
         const inputWords = textInput.value.split(' ');
 
         let highlightedText = '';
+        let allCorrect = true;
 
         for (let i = 0; i < sampleWords.length; i++) {
             if (inputWords[i] === undefined) {
                 highlightedText += `<span>${sampleWords[i]}</span> `;
+                allCorrect = false;
             } else if (inputWords[i] === sampleWords[i]) {
                 highlightedText += `<span style="color: blue;">${sampleWords[i]}</span> `;
             } else {
                 highlightedText += `<span style="color: red;">${sampleWords[i]}</span> `;
+                allCorrect = false;
             }
         }
 
         sampleText.innerHTML = highlightedText.trim();
+
+        // Enable the stop button only if all words are correct
+        stopBtn.disabled = !allCorrect;
     }
 
     // Add event listeners
     chooseDifficulty.addEventListener('change', updateSampleText); // Update sample text when difficulty changes
     startBtn.addEventListener('click', startTest); // Start the test when start button is clicked
     stopBtn.addEventListener('click', stopTest); // Stop the test when stop button is clicked
+    retryBtn.addEventListener('click', resetTest); // Reset the test when retry button is clicked
     textInput.addEventListener('input', provideRealTimeFeedback); // Provide real-time feedback as the user types
+
+    // Add event listener for Enter key to stop the test
+    textInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && !stopBtn.disabled) {
+            stopTest();
+        }
+    });
 
     // Initialize with the default difficulty level
     const initialDifficulty = chooseDifficulty.value;
     sampleText.textContent = getRandomText(initialDifficulty); // Set initial sample text
     textInput.disabled = true; // Disable the text input field initially
+    retryBtn.disabled = true; // Disable the retry button initially
 });
+

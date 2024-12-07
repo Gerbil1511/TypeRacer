@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="col text-center col-md-12 my-3">
                     <h1 class="header-title">TypeRacer</h1>
-                    <button class="btn btn-light my-2" id="instructionsButton">
+                    <button class="btn btn-light my-2" id="instructionsButton" data-bs-toggle="modal" data-bs-target="#instructionsModal">
                         <i class="fas fa-info-circle mx-2" id="infoIcon"></i>Instructions</button>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label visually-hidden" for="user-input">Please type Here</label>
-                    <textarea class="form-control" id="textInput" rows="6" placeholder="Please click the start button to begin the test"></textarea>
+                    <textarea class="form-control" id="textInput" rows="6" placeholder="Please click the START button to begin the test"></textarea>
                 </div>
                 <div class="mb-3 text-center">
                     <button class="btn btn-lg" id="startBtn">Start</button>
@@ -70,11 +70,39 @@
     </div>
 </main>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Font Awesome Kit -->
-    <script src="https://kit.fontawesome.com/33a7724bf9.js" crossorigin="anonymous"></script>
-    <script src="assets/js/script.js"></script>
+
+<!-- Modal -->
+<div class="modal fade" id="instructionsModal" tabindex="-1" aria-labelledby="instructionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="instructionsModalLabel">Instructions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Welcome to the TypeRacer typing test!</p>
+                <p>Here's how it works:</p>
+                <ol>
+                    <li>Choose a difficulty level from the dropdown menu.</li>
+                    <li>The test will start as soon as you begin typing.</li>
+                    <li>Press the "Enter" key to stop the test.</li>
+                    <li>Your results will be displayed in the Results area.</li>
+                    <li>You can retry the test by clicking the "Retry" button.</li>
+                </ol>
+                <p>Good luck and have fun!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+<!-- Font Awesome Kit -->
+<script src="https://kit.fontawesome.com/33a7724bf9.js" crossorigin="anonymous"></script>
+<script src="assets/js/script.js"></script>
 </body>
 
 </html>
